@@ -2,13 +2,13 @@
 Standard Django user model except with email address instead of username.
 Removes all traces of the username field from the model and django admin.
 
-# Usage
-Add / install the dependency to your project
+# Getting started
+Install the dependency with pip
 ```bash
-# pip
 pip install git+ssh://git@github.com/ronnyholm/django-email-user.git
-
-# poetry
+```
+Or with poetry
+```bash
 poetry add git+ssh://git@github.com/ronnyholm/django-email-user.git
 ```
 
@@ -18,7 +18,7 @@ Update `AUTH_USER_MODEL` in `settings.py`
 AUTH_USER_MODEL = "email_user.User"
 ```
 
-# Working with the user model
+# Usage
 Always use `django.contrib.auth.get_user_model()` when referencing the user model.
 
 ```python
