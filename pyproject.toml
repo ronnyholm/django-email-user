@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "django-email-user"
+version = "0.1.0"
+description = ""
+authors = ["Ronny Holm <12713055+ronnyholm@users.noreply.github.com>"]
+readme = "README.md"
+packages = [{ include = "email_user" }]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^4.2.7"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
