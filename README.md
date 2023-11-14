@@ -32,3 +32,19 @@ user.save()
 # Querying
 all_the_johns = User.objects.filter(first_name="John")
 ```
+
+## Fixing django admin grouping
+By default Django will separate the `Group` and the new `User` models since they come from two separate apps, to fix this we can leverage the [django-modeladmin-reorder](https://github.com/mishbahr/django-modeladmin-reorder) project to fix the grouping.
+```python
+# settings.py
+INSTALLED_APPS = [
+  ...
+  "email_user",
+  "admin_reorder",
+  ...
+]
+
+ADMIN_REORDER = (
+    {"app": "auth", "models": ('email_user.User', 'auth.Group')},
+)
+```
