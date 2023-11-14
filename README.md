@@ -34,17 +34,72 @@ all_the_johns = User.objects.filter(first_name="John")
 ```
 
 ## Fixing django admin grouping
-By default Django will separate the `Group` and the new `User` models since they come from two separate apps, to fix this we can leverage the [django-modeladmin-reorder](https://github.com/mishbahr/django-modeladmin-reorder) project to fix the grouping.
+By default Django will separate the `Group` and the new `User` models since they come from two separate apps, to fix this we can create proxies for them under a new app. I've found this to be the least hacky method.
+```bash
+python manage.py startapp users
+```
+
+Edit the `users/app.py` file to give it a decent verbose name
 ```python
-# settings.py
+# users/app.py
+from django.apps import AppConfig
+
+
+class UsersConfig(AppConfig):
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "users"
+    verbose_name = "Users and Authentication"
+```
+
+Proxy the old group and new user models into this app
+```python
+# users/models.py
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
+User = get_user_model()
+
+class UserProxy(User):
+    class Meta:
+        proxy = True
+        verbose_name = "user"
+        verbose_name_plural = "users"
+
+class GroupProxy(Group):
+    class Meta:
+        proxy = True
+        verbose_name = "group"
+        verbose_name_plural = "groups"
+```
+
+Unregister the old models and register the new proxies
+```python
+# users/admin.py
+from django.contrib import admin
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group as OldGroup
+from django.contrib.auth.admin import GroupAdmin
+from email_user.admin import UserAdmin
+from .models import UserProxy, GroupProxy
+OldUser = get_user_model()
+
+admin.site.unregister(OldUser)
+admin.site.unregister(OldGroup)
+
+admin.site.register(UserProxy, UserAdmin)
+admin.site.register(GroupProxy, GroupAdmin)
+```
+
+Add the new app to `INSTALLED_APPS`
+```python
+# your_project/settings.py
+...
 INSTALLED_APPS = [
   ...
-  "email_user",
-  "admin_reorder",
+  "your_project",
+  "users",
   ...
 ]
-
-ADMIN_REORDER = (
-    {"app": "auth", "models": ('email_user.User', 'auth.Group')},
-)
+...
 ```
+
+All done, enjoy your tidy Django admin without the jank and quirks!
