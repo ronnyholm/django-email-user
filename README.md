@@ -5,11 +5,11 @@ Removes all traces of the username field from the model and django admin.
 # Getting started
 Install the dependency with pip
 ```bash
-pip install git+ssh://git@github.com/ronnyholm/django-email-user.git
+pip install git+https://github.com/ronnyholm/django-email-user.git
 ```
 Or with poetry
 ```bash
-poetry add git+ssh://git@github.com/ronnyholm/django-email-user.git
+poetry add git+https://github.com/ronnyholm/django-email-user.git
 ```
 
 Update `AUTH_USER_MODEL` in `settings.py`
