@@ -1,4 +1,4 @@
-# Django Email User
+# Django 4.2 Email User
 Standard Django user model except with email address instead of username.
 Removes all traces of the username field from the model and django admin.
 
