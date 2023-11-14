@@ -48,7 +48,7 @@ from django.apps import AppConfig
 class UsersConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "users"
-    verbose_name = "Users and Authorization"
+    verbose_name = "Authentication and Authorization"
 ```
 
 Proxy the old group and new user models into this app
